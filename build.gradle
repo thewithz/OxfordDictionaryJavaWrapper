@@ -1,0 +1,30 @@
+plugins {
+    id 'java-library'
+}
+
+dependencies {
+    api 'net.dv8tion:JDA:3.6.0_365'
+    api 'com.jagrosh:jda-utilities:2.1'
+
+    testImplementation 'junit:junit:4.12'
+}
+
+repositories {
+    jcenter()
+}
+
+version = '0.1.0'
+
+sourceSets {
+    main.java.srcDir "src/main/java/"
+}
+
+jar {
+
+    manifest {
+        attributes('Implementation-Title': project.name,
+        'Implementation-Version': project.version,
+        'Main-Class': 'tech.thewithz.oxforddict.OxfordDictionary')
+    }
+
+}
