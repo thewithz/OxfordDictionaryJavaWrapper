@@ -94,11 +94,11 @@ public class TranslationRequestBuilder {
         }
     }
 
-    private String word;
+    private OxfordDictionary dict;
     private TranslationPair pair;
 
-    public TranslationRequestBuilder(String word) {
-        this.word = word;
+    public TranslationRequestBuilder(OxfordDictionary dict) {
+        this.dict = dict;
     }
 
     public TranslationRequestBuilder setTranslationPair(TranslationPair pair) {
@@ -106,11 +106,9 @@ public class TranslationRequestBuilder {
         return this;
     }
 
-    public JsonObject build() throws UnsupportedLanguageException {
-        if(pair == null)
-            throw new UnsupportedLanguageException("You must choose a language pair");
-
-        //TODO make api request
+    public JsonObject build(String word) {
+        if(pair == null) throw new IllegalArgumentException("You must choose a language pair");
+        return dict.request(word, dict.BASE_URL, dict.Endpoint.ENTRIES, pair);
     }
     
 }
