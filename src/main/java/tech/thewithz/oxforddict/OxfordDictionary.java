@@ -1,6 +1,7 @@
 package tech.thewithz.oxforddict;
 
 import exceptions.*;
+import requests.*;
 
 public interface OxfordDictionary {
 
@@ -34,14 +35,39 @@ public interface OxfordDictionary {
             return IANAcode;
         }
     }
+    
+    protected enum Endpoint {
+        ENTRIES("entries"),
+        INFLECTIONS("inflections"),
+        SEARCH("search"),
+        WORDLIST("wordlist"),
+        STATS("stats"),
+        LANGUAGES("languages),
+        FILTERS("filters"),
+        LEXICALCATEGORIES("lexicalcategories"),
+        REGISTERS("registers"),
+        DOMAINS("domains"),
+        REGIONS("regions"),
+        GRAMMATICALFEATURES("grammaticalFeatures");
 
-    private final String BASE_URL = "https://od-api-demo.oxforddictionaries.com/api/v1";
+        private String endpoint;
 
-    private Language lang = Language.EN;
+        Endpoint(String endpoint) {
+            this.endpoint = endpoint;
+        }
 
-    private String app_key = "";
+        public String getEndpoint() {
+            return endpoint;
+        }
+    }
 
-    private String app_id = "";
+    public final String BASE_URL = "https://od-api-demo.oxforddictionaries.com/api/v1";
+
+    protected Language lang = Language.EN;
+
+    protected String app_key = "";
+
+    protected String app_id = "";
 
     public void setLanguage(Language lang);
 
@@ -51,8 +77,7 @@ public interface OxfordDictionary {
 
     public EntriesRequestBuilder entries(String word);
 
-    // throws the exception if both antonyms and synonyms are false
-    public JsonObject thesaurus(String word, boolean antonyms, boolean synonyms) throws BadRequestException;
+    public JsonObject thesaurus(String word, boolean antonyms, boolean synonyms);
 
     public SearchRequestBuilder search(String word);
 
@@ -60,6 +85,9 @@ public interface OxfordDictionary {
 
     public WordlistRequestBuilder wordlist(String word);
 
-    // throws the exception if lang is anything but english
-    public JsonObject sentences(String word) throws UnsupportedLanguageException;
+    public JsonObject sentences(String word);
+
+    public JsonObject request(String word, String url, Endpoint endpoint, HashMap<String, LinkedList<String>> filterMap);
+
+    public JsonObject request(String word, String url, Endpoint endpoint, TranslationRequestBuilder.TranslationPair pair);
 }
