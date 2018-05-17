@@ -42,7 +42,7 @@ public interface OxfordDictionary {
         SEARCH("search"),
         WORDLIST("wordlist"),
         STATS("stats"),
-        LANGUAGES("languages),
+        LANGUAGES("languages"),
         FILTERS("filters"),
         LEXICALCATEGORIES("lexicalcategories"),
         REGISTERS("registers"),
