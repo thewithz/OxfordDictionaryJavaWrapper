@@ -1,4 +1,4 @@
-public class LemmatronRequestBuilder {
+public class LemmatronRequestBuilder extends RequestBuilder {
     private OxfordDictionary dict;
     private HashMap<String, LinkedList<String>> filterMap = new HashMap<String, LinkedList<String>>();
 
@@ -18,13 +18,11 @@ public class LemmatronRequestBuilder {
 
     private void addFiltersToMap(String filterName, String... filters) {
         if(filters.length == 0) throw new IllegalArgumentException("You  must enter at least one filter.");
-        if(!filterMap.getKeys().contains(filterName))
-            filterMap.put(filterName, new LinkedList<String>(filters));
-        else
-            filters.forEach(filter -> filterMap.get(filterName).add(filter));
+        if(!filterMap.getKeys().contains(filterName)) filterMap.put(filterName, new LinkedList<String>(filters));
+        else Collections.asList(filters).forEach(filter -> filterMap.get(filterName).add(filter));
     }
 
     public JsonObject build(String word) {
-        return dict.request(word, dict.BASE_URL, dict.Endpoint.INFLECTIONS, filterMap);
+        return dict.request(word, dict.Endpoint.INFLECTIONS, filterMap);
     }
 }

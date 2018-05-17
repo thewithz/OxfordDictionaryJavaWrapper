@@ -108,7 +108,7 @@ public class TranslationRequestBuilder {
 
     public JsonObject build(String word) {
         if(pair == null) throw new IllegalArgumentException("You must choose a language pair");
-        return dict.request(word, dict.BASE_URL, dict.Endpoint.ENTRIES, pair);
+        return dict.request(word, dict.Endpoint.ENTRIES, pair);
     }
     
 }
