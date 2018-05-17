@@ -58,22 +58,65 @@ public class OxfordDictionaryImpl implements OxfordDictionary {
     }
 
     @Override
-    public JsonObject request(String word, String url, Endpoint endpoint, HashMap<String, LinkedList<String>> filterMap) {
+    public JsonObject request(String word, Endpoint endpoint, HashMap<String, LinkedList<String>> filterMap) {
+        ArrayList<String> filterStrings = new ArrayList<String>(); 
+        for(String filter : filterMap.getKeys()) {
+            StringBuilder filterBuilder = new StringBuilder();
+            filterBuilder.append(filter)
+                .append("=")
+                .append(filterMap.get(filter)
+                        .stream()
+                        .map(filterType -> filterType.toString())
+                        .collect(Collectors.joining(",")));
+            filterStrings.add(filterBuilder.toString());
+        }
+        StringBuilder urlBuilder = new StringBuilder();
+        urlBuilder.append(BASE_URL)
+            .append("/")
+            .append(endpoint)
+            .append("/")
+            .append(lang.getIANAcode())
+            .append("/")
+            .append(word)
+            .append("/")
+            .append(filterStrings.stream()
+                    .map(filters -> filters.toString())
+                    .collect(Collectors.joining(";")));
+        return request(urlBuilder.toString());
+    }
+
+    @Override
+    public JsonObject request(String word, Endpoint endpoint, TranslationRequestBuilder.TranslationPair pair) {
+
+    }
+
+    private JsonObject request(String url){
+        StringBuilder jsonBuilder = new StringBuilder();
         try {
-            URL url = new URL();
+            URL url = new URL(url);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
             conn.setRequestProperty("Accept", "application/json");
             conn.setRequestProperty("app_id", app_id);
             conn.setRequestProperty("app_key", app_key);
 
-            if (conn.getResponseCode() != 200) throw new RuntimeException("Failed : HTTP error code : " + conn.getResponseCode());
+            switch(conn.getResponseCode()){
+                case 200: break; // no errors
+                case 403: throw new AuthenticationException("The request failed due to invalid credentials.");
+                case 404: throw new WordNotFoundException("No information found, or the requested URL was not found on the server.");
+                case 400: throw new BadRequestException("The request was invalid or cannot be otherwise served. An accompanying error message will explain further.");
+                case 500:
+                case 501:
+                case 502:
+                case 503:
+                case 504: throw new ServiceUnavailableException("The Oxford Dictionary service is currently unreachable.");
+                default: break;
+            }
 
             BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
 
             String output;
-            System.out.println("Output from Server .... \n");
-            while ((output = br.readLine()) != null) System.out.println(output);
+            while ((output = br.readLine()) != null) jsonBuilder.append(output).append("\n");
 
             conn.disconnect();
         }catch(MalformedURLException e) {
@@ -81,11 +124,7 @@ public class OxfordDictionaryImpl implements OxfordDictionary {
         }catch(IOException e) {
             e.printStackTrace();
         }
-    }
-
-    @Override
-    public JsonObject request(String word, String url, Endpoint endpoint, TranslationRequestBuilder.TranslationPair pair) {
-
+        return new JsonObject(jsonBuilder.toSring());
     }
 
 }
