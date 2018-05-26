@@ -62,7 +62,7 @@ public class EntriesRequestBuilder extends RequestBuilder {
 
     public JSONObject build() {
         return dict.request(OxfordDictionary.BASE_URL + "/" + OxfordDictionary.Endpoint.ENTRIES.getEndpoint() + "/" + dict.getLang()
-                                                                                                                          .getIANAcode() + "/" + word + "/" +
-                                    filterMapToString());
+                                                                                                                          .getIANAcode() + "/" + word +
+                                    (filterMapToString().equals("") ? "" : "/" + filterMapToString()));
     }
 }

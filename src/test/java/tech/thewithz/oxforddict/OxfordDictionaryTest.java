@@ -23,11 +23,24 @@ public class OxfordDictionaryTest {
     public void lemmatronBuilderTest() {
         Assertions.assertNotNull(dict.lemmatron("cat")
                                      .build());
+        Assertions.assertNotNull(dict.lemmatron("cat")
+                                     .addLexicalCategoryFilters("noun")
+                                     .build());
+        Assertions.assertNotNull(dict.lemmatron("can")
+                                     .addGrammaticalFeatureFilters("modal")
+                                     .build());
+        Assertions.assertNotNull(dict.lemmatron("actress")
+                                     .addLexicalCategoryFilters("noun")
+                                     .addGrammaticalFeatureFilters("feminine")
+                                     .build());
+
     }
 
     @Test
     @DisplayName("Testing the entries builder.")
     public void entriesBuilderTest() {
+        Assertions.assertNotNull(dict.entries("change")
+                                     .build());
         Assertions.assertNotNull(dict.entries("change")
                                      .addLexicalCategoryFilters("verb")
                                      .build());
