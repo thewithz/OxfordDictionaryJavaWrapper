@@ -1,4 +1,6 @@
-public class WordNotFoundException extends Exception {
+package tech.thewithz.oxforddict.exceptions;
+
+public class WordNotFoundException extends RuntimeException {
     public WordNotFoundException() {
 
     }

@@ -1,4 +1,6 @@
-public class AuthenticationException extends Exception {
+package tech.thewithz.oxforddict.exceptions;
+
+public class AuthenticationException extends RuntimeException {
     public AuthenticationException() {
 
     }

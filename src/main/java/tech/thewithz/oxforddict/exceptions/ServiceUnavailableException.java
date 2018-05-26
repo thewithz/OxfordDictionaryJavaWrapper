@@ -1,3 +1,5 @@
+package tech.thewithz.oxforddict.exceptions;
+
 public class ServiceUnavailableException extends RuntimeException {
     public ServiceUnavailableException() {
 

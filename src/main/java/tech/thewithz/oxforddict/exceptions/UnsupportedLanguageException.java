@@ -1,4 +1,6 @@
-public class UnsupportedLanguageException extends Exception {
+package tech.thewithz.oxforddict.exceptions;
+
+public class UnsupportedLanguageException extends RuntimeException {
     public UnsupportedLanguageException() {
 
     }

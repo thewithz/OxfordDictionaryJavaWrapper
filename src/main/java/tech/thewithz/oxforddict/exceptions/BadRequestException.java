@@ -1,3 +1,5 @@
+package tech.thewithz.oxforddict.exceptions;
+
 public class BadRequestException extends RuntimeException {
     public BadRequestException() {
 
